@@ -1,0 +1,4 @@
+{
+  "/authors/:authorId/books": "/bookAuthors?authorId=:authorId&_expand=book",
+  "/books/:bookId/authors": "/bookAuthors?bookId=:bookId&_expand=author"
+}

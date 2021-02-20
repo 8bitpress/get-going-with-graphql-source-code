@@ -1,38 +1,26 @@
-import fetch from "node-fetch";
-
-const baseUrl = "http://localhost:5000";
-
 const resolvers = {
   Author: {
-    async books(author, args, context, info) {
-      const res = await fetch(`${baseUrl}/authors/${author.id}/books`);
-      const items = await res.json();
-      return items.map(item => item.book);
+    books(author, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getAuthorBooks(author.id);
     }
   },
   Book: {
-    async authors(book, args, context, info) {
-      const res = await fetch(`${baseUrl}/books/${book.id}/authors`);
-      const items = await res.json();
-      return items.map(item => item.author);
+    authors(book, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getBookAuthors(book.id);
     }
   },
   Query: {
-    async author(root, { id }, context, info) {
-      const res = await fetch(`${baseUrl}/authors/${id}`);
-      return res.json();
+    author(root, { id }, { dataSources }, info) {
+      return dataSources.jsonServerApi.getAuthor(id);
     },
-    async authors(root, args, context, info) {
-      const res = await fetch(`${baseUrl}/authors`);
-      return res.json();
+    authors(root, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getAuthors();
     },
-    async book(root, { id }, context, info) {
-      const res = await fetch(`${baseUrl}/books/${id}`);
-      return res.json();
+    book(root, { id }, { dataSources }, info) {
+      return dataSources.jsonServerApi.getBook(id);
     },
-    async books(root, args, context, info) {
-      const res = await fetch(`${baseUrl}/books`);
-      return res.json();
+    books(root, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getBooks();
     }
   }
 };

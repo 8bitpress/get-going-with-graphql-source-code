@@ -10,7 +10,16 @@ const typeDefs = gql`
   type Book {
     id: ID!
     authors: [Author]
+    cover: String
+    reviews: [Review]
     title: String!
+  }
+
+  type Review {
+    id: ID!
+    book: Book
+    rating: Int!
+    text: String
   }
 
   type Query {

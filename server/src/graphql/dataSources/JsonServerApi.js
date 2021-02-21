@@ -25,6 +25,10 @@ class JsonServerApi extends RESTDataSource {
     return items.map(item => item.author);
   }
 
+  getBookReviews(bookId) {
+    return this.get(`/reviews?bookId=${bookId}`);
+  }
+
   getBooks() {
     return this.get(`/books`);
   }

@@ -7,6 +7,14 @@ const resolvers = {
   Book: {
     authors(book, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getBookAuthors(book.id);
+    },
+    reviews(book, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getBookReviews(book.id);
+    }
+  },
+  Review: {
+    book(review, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getBook(review.bookId);
     }
   },
   Query: {

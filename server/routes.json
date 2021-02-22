@@ -1,4 +1,5 @@
 {
   "/authors/:authorId/books": "/bookAuthors?authorId=:authorId&_expand=book",
-  "/books/:bookId/authors": "/bookAuthors?bookId=:bookId&_expand=author"
+  "/books/:bookId/authors": "/bookAuthors?bookId=:bookId&_expand=author",
+  "/users/:userId/books": "/userBooks?userId=:userId&_expand=book"
 }

@@ -18,8 +18,18 @@ const typeDefs = gql`
   type Review {
     id: ID!
     book: Book
-    rating: Int!
-    text: String
+    rating: Int
+    reviewer: User!
+    text: String!
+  }
+
+  type User {
+    id: ID!
+    email: String!
+    library: [Book]
+    name: String
+    reviews: [Review]
+    username: String!
   }
 
   type Query {
@@ -27,6 +37,7 @@ const typeDefs = gql`
     authors: [Author]
     book(id: ID!): Book
     books: [Book]
+    user(username: String!): User
   }
 `;
 

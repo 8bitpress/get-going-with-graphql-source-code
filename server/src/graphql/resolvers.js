@@ -14,21 +14,35 @@ const resolvers = {
   },
   Review: {
     book(review, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getBook(review.bookId);
+      return dataSources.jsonServerApi.getBookById(review.bookId);
+    },
+    reviewer(review, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getUserById(review.userId);
+    }
+  },
+  User: {
+    library(user, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getUserLibrary(user.id);
+    },
+    reviews(user, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.getUserReviews(user.id);
     }
   },
   Query: {
     author(root, { id }, { dataSources }, info) {
-      return dataSources.jsonServerApi.getAuthor(id);
+      return dataSources.jsonServerApi.getAuthorById(id);
     },
     authors(root, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getAuthors();
     },
     book(root, { id }, { dataSources }, info) {
-      return dataSources.jsonServerApi.getBook(id);
+      return dataSources.jsonServerApi.getBookById(id);
     },
     books(root, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getBooks();
+    },
+    user(root, { username }, { dataSources }, info) {
+      return dataSources.jsonServerApi.getUser(username);
     }
   }
 };

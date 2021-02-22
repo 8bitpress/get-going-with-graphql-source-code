@@ -3,7 +3,7 @@ import { RESTDataSource } from "apollo-datasource-rest";
 class JsonServerApi extends RESTDataSource {
   baseURL = process.env.REST_API_BASE_URL;
 
-  getAuthor(id) {
+  getAuthorById(id) {
     return this.get(`/authors/${id}`);
   }
 
@@ -16,7 +16,7 @@ class JsonServerApi extends RESTDataSource {
     return this.get(`/authors`);
   }
 
-  getBook(id) {
+  getBookById(id) {
     return this.get(`/books/${id}`);
   }
 
@@ -31,6 +31,24 @@ class JsonServerApi extends RESTDataSource {
 
   getBooks() {
     return this.get(`/books`);
+  }
+
+  async getUser(username) {
+    const [user] = await this.get(`/users?username=${username}`);
+    return user;
+  }
+
+  getUserById(id) {
+    return this.get(`/users/${id}`);
+  }
+
+  async getUserLibrary(userId) {
+    const items = await this.get(`/users/${userId}/books`);
+    return items.map(item => item.book);
+  }
+
+  getUserReviews(userId) {
+    return this.get(`/reviews?userId=${userId}`);
   }
 }
 

@@ -39,6 +39,10 @@ const typeDefs = gql`
     books: [Book]
     user(username: String!): User
   }
+
+  type Mutation {
+    createAuthor(name: String!): Author!
+  }
 `;
 
 export default typeDefs;

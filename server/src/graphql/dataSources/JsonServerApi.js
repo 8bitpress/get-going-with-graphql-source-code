@@ -3,6 +3,8 @@ import { RESTDataSource } from "apollo-datasource-rest";
 class JsonServerApi extends RESTDataSource {
   baseURL = process.env.REST_API_BASE_URL;
 
+  // READ
+
   getAuthorById(id) {
     return this.get(`/authors/${id}`);
   }
@@ -49,6 +51,11 @@ class JsonServerApi extends RESTDataSource {
 
   getUserReviews(userId) {
     return this.get(`/reviews?userId=${userId}`);
+  }
+
+  // CREATE
+  createAuthor(name) {
+    return this.post("/authors", { name });
   }
 }
 

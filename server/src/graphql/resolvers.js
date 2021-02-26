@@ -51,6 +51,9 @@ const resolvers = {
     },
     createBook(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.createBook(input);
+    },
+    createReview(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.createReview(input);
     }
   }
 };

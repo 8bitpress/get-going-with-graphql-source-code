@@ -1,3 +1,4 @@
+import { ForbiddenError } from "apollo-server";
 import { RESTDataSource } from "apollo-datasource-rest";
 
 class JsonServerApi extends RESTDataSource {
@@ -6,7 +7,9 @@ class JsonServerApi extends RESTDataSource {
   // READ
 
   getAuthorById(id) {
-    return this.get(`/authors/${id}`);
+    return this.get(`/authors/${id}`).catch(
+      err => err.message === "404: Not Found" && null
+    );
   }
 
   async getAuthorBooks(authorId) {
@@ -19,7 +22,9 @@ class JsonServerApi extends RESTDataSource {
   }
 
   getBookById(id) {
-    return this.get(`/books/${id}`);
+    return this.get(`/books/${id}`).catch(
+      err => err.message === "404: Not Found" && null
+    );
   }
 
   async getBookAuthors(bookId) {
@@ -54,28 +59,47 @@ class JsonServerApi extends RESTDataSource {
   }
 
   // CREATE
+
   createAuthor(name) {
     return this.post("/authors", { name });
   }
 
-  async createBook({ authorIDs, cover, summary, title }) {
+  async createBook({ authorIds, cover, summary, title }) {
     const book = await this.post("/books", {
       ...(cover && { cover }),
       ...(summary && { summary }),
       title
     });
 
-    if (authorIDs) {
+    if (authorIds) {
       await Promise.all(
-        authorIDs.map(authorID =>
+        authorIds.map(authorId =>
           this.post("/bookAuthors", {
-            authorId: parseInt(authorID),
+            authorId: parseInt(authorId),
             bookId: book.id
           })
         )
       );
     }
     return book;
+  }
+
+  async createReview({ bookId, rating, reviewerId, text }) {
+    const existingReview = await this.get(
+      `/reviews?bookId=${bookId}&userId=${reviewerId}`
+    );
+
+    if (existingReview.length) {
+      throw new ForbiddenError("Users can only submit one review per book");
+    }
+
+    return this.post("/reviews", {
+      ...(text && { text }),
+      bookId,
+      createdAt: new Date(),
+      rating,
+      userId: reviewerId
+    });
   }
 }
 

@@ -54,6 +54,12 @@ const resolvers = {
     },
     createReview(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.createReview(input);
+    },
+    deleteReview(root, { id }, { dataSources }, info) {
+      return dataSources.jsonServerApi.deleteReview(id);
+    },
+    updateReview(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.updateReview(input);
     }
   }
 };

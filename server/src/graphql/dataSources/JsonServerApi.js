@@ -95,11 +95,27 @@ class JsonServerApi extends RESTDataSource {
 
     return this.post("/reviews", {
       ...(text && { text }),
-      bookId,
-      createdAt: new Date(),
+      bookId: parseInt(bookId),
+      createdAt: new Date().toISOString(),
       rating,
-      userId: reviewerId
+      userId: parseInt(reviewerId)
     });
+  }
+
+  // UPDATE
+
+  updateReview({ id, rating, text }) {
+    return this.patch(`reviews/${id}`, {
+      rating,
+      ...(text && { text })
+    });
+  }
+
+  // DELETE
+
+  async deleteReview(id) {
+    await this.delete(`/reviews/${id}`);
+    return true;
   }
 }
 

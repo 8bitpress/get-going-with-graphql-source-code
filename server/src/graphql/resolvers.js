@@ -48,6 +48,9 @@ const resolvers = {
   Mutation: {
     createAuthor(root, { name }, { dataSources }, info) {
       return dataSources.jsonServerApi.createAuthor(name);
+    },
+    createBook(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.createBook(input);
     }
   }
 };

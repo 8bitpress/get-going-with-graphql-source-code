@@ -32,6 +32,13 @@ const typeDefs = gql`
     username: String!
   }
 
+  input CreateBookInput {
+    authorIDs: [ID]
+    cover: String
+    summary: String
+    title: String!
+  }
+
   type Query {
     author(id: ID!): Author
     authors: [Author]
@@ -42,6 +49,7 @@ const typeDefs = gql`
 
   type Mutation {
     createAuthor(name: String!): Author!
+    createBook(input: CreateBookInput!): Book!
   }
 `;
 

@@ -41,6 +41,9 @@ const resolvers = {
     books(root, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getBooks();
     },
+    review(root, { id }, { dataSources }, info) {
+      return dataSources.jsonServerApi.getReviewById(id);
+    },
     user(root, { username }, { dataSources }, info) {
       return dataSources.jsonServerApi.getUser(username);
     }

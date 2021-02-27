@@ -87,6 +87,7 @@ const typeDefs = gql`
     authors: [Author]
     book(id: ID!): Book
     books: [Book]
+    review(id: ID!): Review
     user(username: String!): User
   }
 

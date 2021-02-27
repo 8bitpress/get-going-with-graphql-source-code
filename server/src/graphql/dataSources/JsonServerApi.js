@@ -56,13 +56,21 @@ class JsonServerApi extends RESTDataSource {
     return this.get(`/books`);
   }
 
+  getReviewById(id) {
+    return this.get(`/reviews/${id}`).catch(
+      err => err.message === "404: Not Found" && null
+    );
+  }
+
   async getUser(username) {
     const [user] = await this.get(`/users?username=${username}`);
     return user;
   }
 
   getUserById(id) {
-    return this.get(`/users/${id}`);
+    return this.get(`/users/${id}`).catch(
+      err => err.message === "404: Not Found" && null
+    );
   }
 
   async getUserLibrary(userId) {

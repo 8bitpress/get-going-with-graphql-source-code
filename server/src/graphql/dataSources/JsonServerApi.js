@@ -4,6 +4,22 @@ import { RESTDataSource } from "apollo-datasource-rest";
 class JsonServerApi extends RESTDataSource {
   baseURL = process.env.REST_API_BASE_URL;
 
+  // UTILS
+
+  async checkUniqueUserData(email, username) {
+    const res = await Promise.all([
+      this.get(`/users?email=${email}`),
+      this.get(`/users?username=${username}`)
+    ]);
+    const [existingEmail, existingUsername] = res;
+
+    if (existingEmail.length) {
+      throw new ForbiddenError("Email is already in use");
+    } else if (existingUsername.length) {
+      throw new ForbiddenError("Username already in use");
+    }
+  }
+
   // READ
 
   getAuthorById(id) {
@@ -99,6 +115,16 @@ class JsonServerApi extends RESTDataSource {
       createdAt: new Date().toISOString(),
       rating,
       userId: parseInt(reviewerId)
+    });
+  }
+
+  async signUp({ email, name, username }) {
+    await this.checkUniqueUserData(email, username);
+    return this.post("/users", {
+      createdAt: new Date().toISOString(),
+      email,
+      name,
+      username
     });
   }
 

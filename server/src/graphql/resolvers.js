@@ -58,6 +58,9 @@ const resolvers = {
     deleteReview(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.deleteReview(id);
     },
+    signUp(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.signUp(input);
+    },
     updateReview(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.updateReview(input);
     }

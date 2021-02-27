@@ -1,6 +1,23 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+  enum Genre {
+    ADVENTURE
+    CHILDRENS
+    CLASSICS
+    COMIC_GRAPHIC_NOVEL
+    DETECTIVE_MYSTERY
+    DYSTOPIA
+    FANTASY
+    HORROR
+    HUMOR
+    NON_FICTION
+    SCIENCE_FICTION
+    ROMANCE
+    THRILLER
+    WESTERN
+  }
+
   type Author {
     id: ID!
     books: [Book]
@@ -11,6 +28,7 @@ const typeDefs = gql`
     id: ID!
     authors: [Author]
     cover: String
+    genre: Genre
     reviews: [Review]
     title: String!
   }
@@ -33,8 +51,9 @@ const typeDefs = gql`
   }
 
   input CreateBookInput {
-    authorIDs: [ID]
+    authorIds: [ID]
     cover: String
+    genre: Genre
     summary: String
     title: String!
   }

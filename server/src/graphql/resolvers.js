@@ -46,6 +46,9 @@ const resolvers = {
     }
   },
   Mutation: {
+    addBooksToLibrary(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.addBooksToLibrary(input);
+    },
     createAuthor(root, { name }, { dataSources }, info) {
       return dataSources.jsonServerApi.createAuthor(name);
     },
@@ -57,6 +60,9 @@ const resolvers = {
     },
     deleteReview(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.deleteReview(id);
+    },
+    removeBooksFromLibrary(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.removeBooksFromLibrary(input);
     },
     signUp(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.signUp(input);

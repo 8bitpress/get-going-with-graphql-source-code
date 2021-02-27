@@ -130,6 +130,45 @@ class JsonServerApi extends RESTDataSource {
 
   // UPDATE
 
+  async addBooksToLibrary({ bookIds, userId }) {
+    const response = await Promise.all(
+      bookIds.map(bookId =>
+        this.get(`/userBooks/?userId=${userId}&bookId=${bookId}`)
+      )
+    );
+    const existingUserBooks = response.flat();
+    const newBookIds = bookIds.filter(
+      bookId => !existingUserBooks.find(book => book.id === parseInt(bookId))
+    );
+
+    await Promise.all(
+      newBookIds.map(bookId =>
+        this.post("/userBooks", {
+          bookId: parseInt(bookId),
+          createdAt: new Date().toISOString(),
+          userId: parseInt(userId)
+        })
+      )
+    );
+
+    return this.get(`/users/${userId}`);
+  }
+
+  async removeBooksFromLibrary({ bookIds, userId }) {
+    const response = await Promise.all(
+      bookIds.map(bookId =>
+        this.get(`/userBooks/?userId=${userId}&bookId=${bookId}`)
+      )
+    );
+    const existingUserBooks = response.flat();
+
+    await Promise.all(
+      existingUserBooks.map(({ id }) => this.delete(`/userBooks/${id}`))
+    );
+
+    return this.get(`/users/${userId}`);
+  }
+
   updateReview({ id, rating, text }) {
     return this.patch(`reviews/${id}`, {
       rating,

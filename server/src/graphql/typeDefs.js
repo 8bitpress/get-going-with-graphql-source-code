@@ -52,6 +52,11 @@ const typeDefs = gql`
     username: String!
   }
 
+  input UpdateLibraryBooksInput {
+    bookIds: [ID!]!
+    userId: ID!
+  }
+
   input UpdateReviewInput {
     id: ID!
     rating: Int!
@@ -67,10 +72,12 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    addBooksToLibrary(input: UpdateLibraryBooksInput!): User!
     createAuthor(name: String!): Author!
     createBook(input: CreateBookInput!): Book!
     createReview(input: CreateReviewInput!): Review!
     deleteReview(id: ID!): Boolean!
+    removeBooksFromLibrary(input: UpdateLibraryBooksInput!): User!
     signUp(input: SignUpInput!): User!
     updateReview(input: UpdateReviewInput!): Review!
   }

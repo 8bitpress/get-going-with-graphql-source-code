@@ -1,9 +1,11 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+  # ENUMS
+
   enum Genre {
     ADVENTURE
-    CHILDRENS
+    CHILDREN
     CLASSICS
     COMIC_GRAPHIC_NOVEL
     DETECTIVE_MYSTERY
@@ -18,10 +20,37 @@ const typeDefs = gql`
     WESTERN
   }
 
+  enum AuthorOrderBy {
+    NAME_ASC
+    NAME_DESC
+  }
+
+  enum BookOrderBy {
+    TITLE_ASC
+    TITLE_DESC
+  }
+
+  enum LibraryOrderBy {
+    ADDED_ON_ASC
+    ADDED_ON_DESC
+  }
+
+  enum ReviewOrderBy {
+    REVIEWED_ON_ASC
+    REVIEWED_ON_DESC
+  }
+
+  # OBJECTS
+
   type Author {
     id: ID!
     books: [Book]
     name: String!
+  }
+
+  type Authors {
+    results: [Author]
+    pageInfo: PageInfo
   }
 
   type Book {
@@ -29,8 +58,21 @@ const typeDefs = gql`
     authors: [Author]
     cover: String
     genre: Genre
-    reviews: [Review]
+    reviews(limit: Int, orderBy: ReviewOrderBy, page: Int): Reviews
     title: String!
+  }
+
+  type Books {
+    results: [Book]
+    pageInfo: PageInfo
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean
+    hasPrevPage: Boolean
+    page: Int
+    perPage: Int
+    totalCount: Int
   }
 
   type Review {
@@ -42,14 +84,21 @@ const typeDefs = gql`
     text: String!
   }
 
+  type Reviews {
+    results: [Review]
+    pageInfo: PageInfo
+  }
+
   type User {
     id: ID!
     email: String!
-    library: [Book]
+    library(limit: Int, orderBy: LibraryOrderBy, page: Int): Books
     name: String
-    reviews: [Review]
+    reviews(limit: Int, orderBy: ReviewOrderBy, page: Int): Reviews
     username: String!
   }
+
+  # INPUTS
 
   input CreateBookInput {
     authorIds: [ID]
@@ -83,11 +132,13 @@ const typeDefs = gql`
     text: String
   }
 
+  # ROOT
+
   type Query {
     author(id: ID!): Author
-    authors: [Author]
+    authors(limit: Int, orderBy: AuthorOrderBy, page: Int): Authors
     book(id: ID!): Book
-    books: [Book]
+    books(limit: Int, orderBy: BookOrderBy, page: Int): Books
     review(id: ID!): Review
     user(username: String!): User
   }

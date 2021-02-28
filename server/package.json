@@ -20,6 +20,7 @@
     "graphql": "^15.5.0",
     "json-server": "^0.16.3",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "parse-link-header": "^1.0.1"
   }
 }

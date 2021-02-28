@@ -1,4 +1,25 @@
 const resolvers = {
+  // ENUMS
+
+  AuthorOrderBy: {
+    NAME_ASC: "name_asc",
+    NAME_DESC: "name_desc"
+  },
+  BookOrderBy: {
+    TITLE_ASC: "title_asc",
+    TITLE_DESC: "title_desc"
+  },
+  LibraryOrderBy: {
+    ADDED_ON_ASC: "createdAt_asc",
+    ADDED_ON_DESC: "createdAt_desc"
+  },
+  ReviewOrderBy: {
+    REVIEWED_ON_ASC: "createdAt_asc",
+    REVIEWED_ON_DESC: "createdAt_desc"
+  },
+
+  // OBJECTS
+
   Author: {
     books(author, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getAuthorBooks(author.id);
@@ -9,7 +30,7 @@ const resolvers = {
       return dataSources.jsonServerApi.getBookAuthors(book.id);
     },
     reviews(book, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getBookReviews(book.id);
+      return dataSources.jsonServerApi.getBookReviews(book.id, args);
     }
   },
   Review: {
@@ -25,24 +46,27 @@ const resolvers = {
   },
   User: {
     library(user, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getUserLibrary(user.id);
+      return dataSources.jsonServerApi.getUserLibrary(user.id, args);
     },
     reviews(user, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getUserReviews(user.id);
+      return dataSources.jsonServerApi.getUserReviews(user.id, args);
     }
   },
+
+  // ROOT
+
   Query: {
     author(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.getAuthorById(id);
     },
     authors(root, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getAuthors();
+      return dataSources.jsonServerApi.getAuthors(args);
     },
     book(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.getBookById(id);
     },
     books(root, args, { dataSources }, info) {
-      return dataSources.jsonServerApi.getBooks();
+      return dataSources.jsonServerApi.getBooks(args);
     },
     review(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.getReviewById(id);

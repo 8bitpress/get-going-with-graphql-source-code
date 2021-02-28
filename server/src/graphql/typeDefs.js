@@ -37,6 +37,7 @@ const typeDefs = gql`
     id: ID!
     book: Book
     rating: Int
+    reviewedOn: String
     reviewer: User!
     text: String!
   }

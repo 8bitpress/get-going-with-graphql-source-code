@@ -16,6 +16,9 @@ const resolvers = {
     book(review, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getBookById(review.bookId);
     },
+    reviewedOn(review, args, { dataSources }, info) {
+      return review.createdAt;
+    },
     reviewer(review, args, { dataSources }, info) {
       return dataSources.jsonServerApi.getUserById(review.userId);
     }

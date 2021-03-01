@@ -21,9 +21,21 @@ const resolvers = {
   // INTERFACES
 
   Person: {
-    __resolveType(person, context, info) {
-      if (person.username) {
+    __resolveType(obj, context, info) {
+      if (obj.username) {
         return "User";
+      } else {
+        return "Author";
+      }
+    }
+  },
+
+  // UNIONS
+
+  BookResult: {
+    __resolveType(obj, context, info) {
+      if (obj.title) {
+        return "Book";
       } else {
         return "Author";
       }
@@ -82,6 +94,9 @@ const resolvers = {
     },
     review(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.getReviewById(id);
+    },
+    searchBooks(root, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.searchBooks(args);
     },
     searchPeople(root, args, { dataSources }, info) {
       return dataSources.jsonServerApi.searchPeople(args);

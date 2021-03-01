@@ -183,6 +183,30 @@ class JsonServerApi extends RESTDataSource {
     return { results: reviews, pageInfo };
   }
 
+  async searchBooks({ exact, query, orderBy = "RESULT_ASC" }) {
+    const bookQueryString = this.parseParams({
+      ...(exact ? { title: query } : { q: query }),
+      limit: 50
+    });
+    const authorQueryString = this.parseParams({
+      ...(exact ? { name: query } : { q: query }),
+      limit: 50
+    });
+
+    const authors = await this.get(`/authors${authorQueryString}`);
+    const books = await this.get(`/books${bookQueryString}`);
+    const results = [].concat(authors, books).sort((a, b) => {
+      const aKey = a.hasOwnProperty("title") ? "title" : "name";
+      const bKey = b.hasOwnProperty("title") ? "title" : "name";
+
+      return orderBy === "RESULT_ASC"
+        ? a[aKey].localeCompare(b[bKey])
+        : b[bKey].localeCompare(a[aKey]);
+    });
+
+    return results;
+  }
+
   async searchPeople({ query, orderBy = "RESULT_ASC" }) {
     const queryString = this.parseParams({
       name_like: query,

@@ -52,6 +52,10 @@ const typeDefs = gql`
     name: String!
   }
 
+  # UNIONS
+
+  union BookResult = Book | Author
+
   # OBJECTS
 
   type Author implements Person {
@@ -152,6 +156,7 @@ const typeDefs = gql`
     book(id: ID!): Book
     books(limit: Int, orderBy: BookOrderBy, page: Int): Books
     review(id: ID!): Review
+    searchBooks(query: String!, orderBy: SearchOrderBy): [BookResult]
     searchPeople(query: String!, orderBy: SearchOrderBy): [Person]
     user(username: String!): User
   }

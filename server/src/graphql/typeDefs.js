@@ -40,9 +40,21 @@ const typeDefs = gql`
     REVIEWED_ON_DESC
   }
 
+  enum SearchOrderBy {
+    RESULT_ASC
+    RESULT_DESC
+  }
+
+  # INTERFACES
+
+  interface Person {
+    id: ID!
+    name: String!
+  }
+
   # OBJECTS
 
-  type Author {
+  type Author implements Person {
     id: ID!
     books: [Book]
     name: String!
@@ -89,11 +101,11 @@ const typeDefs = gql`
     pageInfo: PageInfo
   }
 
-  type User {
+  type User implements Person {
     id: ID!
     email: String!
     library(limit: Int, orderBy: LibraryOrderBy, page: Int): Books
-    name: String
+    name: String!
     reviews(limit: Int, orderBy: ReviewOrderBy, page: Int): Reviews
     username: String!
   }
@@ -140,6 +152,7 @@ const typeDefs = gql`
     book(id: ID!): Book
     books(limit: Int, orderBy: BookOrderBy, page: Int): Books
     review(id: ID!): Review
+    searchPeople(query: String!, orderBy: SearchOrderBy): [Person]
     user(username: String!): User
   }
 

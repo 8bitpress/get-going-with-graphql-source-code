@@ -18,6 +18,18 @@ const resolvers = {
     REVIEWED_ON_DESC: "createdAt_desc"
   },
 
+  // INTERFACES
+
+  Person: {
+    __resolveType(person, context, info) {
+      if (person.username) {
+        return "User";
+      } else {
+        return "Author";
+      }
+    }
+  },
+
   // OBJECTS
 
   Author: {
@@ -70,6 +82,9 @@ const resolvers = {
     },
     review(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.getReviewById(id);
+    },
+    searchPeople(root, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.searchPeople(args);
     },
     user(root, { username }, { dataSources }, info) {
       return dataSources.jsonServerApi.getUser(username);

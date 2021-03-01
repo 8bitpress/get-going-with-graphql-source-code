@@ -60,16 +60,19 @@ class JsonServerApi extends RESTDataSource {
     }
 
     const paginationParams = [];
-    const [sort, order] = orderBy.split("_");
     paginationParams.push(
       `_limit=${limit || this.defaultLimit}`,
-      `_page=${page || "1"}`,
-      `_sort=${sort}`,
-      `_order=${order}`
+      `_page=${page || "1"}`
     );
 
+    const [sort, order] = orderBy ? orderBy.toLowerCase().split("_") : [];
     const otherParams = Object.keys(rest).map(key => `${key}=${rest[key]}`);
-    const queryString = [...paginationParams, ...otherParams].join("&");
+    const queryString = [
+      ...(sort ? [`_sort=${sort}`] : []),
+      ...(order ? [`_order=${order}`] : []),
+      ...paginationParams,
+      ...otherParams
+    ].join("&");
 
     return queryString ? `?${queryString}` : "";
   }
@@ -87,11 +90,11 @@ class JsonServerApi extends RESTDataSource {
     return items.map(item => item.book);
   }
 
-  async getAuthors({ limit, orderBy, page }) {
+  async getAuthors({ limit, page, orderBy = "name_asc" }) {
     const queryString = this.parseParams({
       ...(limit && { limit }),
       ...(page && { page }),
-      orderBy: orderBy ? orderBy : "name_asc"
+      orderBy
     });
     const authors = await this.get(`/authors${queryString}`);
     const pageInfo = this.parsePageInfo({ limit, page });
@@ -110,12 +113,12 @@ class JsonServerApi extends RESTDataSource {
     return items.map(item => item.author);
   }
 
-  async getBookReviews(bookId, { limit, orderBy, page }) {
+  async getBookReviews(bookId, { limit, page, orderBy = "createdAt_desc" }) {
     const queryString = this.parseParams({
       ...(limit && { limit }),
       ...(page && { page }),
       bookId,
-      orderBy: orderBy ? orderBy : "createdAt_desc"
+      orderBy
     });
     const reviews = await this.get(`/reviews${queryString}`);
     const pageInfo = this.parsePageInfo({ limit, page });
@@ -123,11 +126,11 @@ class JsonServerApi extends RESTDataSource {
     return { results: reviews, pageInfo };
   }
 
-  async getBooks({ limit, orderBy, page }) {
+  async getBooks({ limit, page, orderBy = "title_asc" }) {
     const queryString = this.parseParams({
       ...(limit && { limit }),
       ...(page && { page }),
-      orderBy: orderBy ? orderBy : "title_asc"
+      orderBy
     });
     const books = await this.get(`/books${queryString}`);
     const pageInfo = this.parsePageInfo({ limit, page });
@@ -152,12 +155,12 @@ class JsonServerApi extends RESTDataSource {
     );
   }
 
-  async getUserLibrary(userId, { limit, orderBy, page }) {
+  async getUserLibrary(userId, { limit, page, orderBy = "createdAt_desc" }) {
     const queryString = this.parseParams({
       _expand: "book",
       ...(limit && { limit }),
       ...(page && { page }),
-      orderBy: orderBy ? orderBy : "createdAt_desc",
+      orderBy,
       userId
     });
     const items = await this.get(`/userBooks${queryString}`);
@@ -167,17 +170,35 @@ class JsonServerApi extends RESTDataSource {
     return { results: books, pageInfo };
   }
 
-  async getUserReviews(userId, { limit, orderBy, page }) {
+  async getUserReviews(userId, { limit, page, orderBy = "createdAt_desc" }) {
     const queryString = this.parseParams({
       ...(limit && { limit }),
       ...(page && { page }),
-      orderBy: orderBy ? orderBy : "createdAt_desc",
+      orderBy,
       userId
     });
     const reviews = await this.get(`/reviews${queryString}`);
     const pageInfo = this.parsePageInfo({ limit, page });
 
     return { results: reviews, pageInfo };
+  }
+
+  async searchPeople({ query, orderBy = "RESULT_ASC" }) {
+    const queryString = this.parseParams({
+      name_like: query,
+      limit: 50
+    });
+    const authors = await this.get(`/authors${queryString}`);
+    const users = await this.get(`/users${queryString}`);
+    const results = []
+      .concat(authors, users)
+      .sort((a, b) =>
+        orderBy === "RESULT_ASC"
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+      );
+
+    return results;
   }
 
   // CREATE

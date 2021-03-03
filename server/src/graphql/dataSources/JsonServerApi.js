@@ -4,7 +4,6 @@ import parseLinkHeader from "parse-link-header";
 
 class JsonServerApi extends RESTDataSource {
   baseURL = process.env.REST_API_BASE_URL;
-  defaultLimit = 20;
 
   async didReceiveResponse(response) {
     if (response.ok) {
@@ -46,7 +45,7 @@ class JsonServerApi extends RESTDataSource {
         hasNextPage: hasNextPage || false,
         hasPrevPage: hasPrevPage || false,
         page: page || 1,
-        perPage: limit || this.defaultLimit,
+        perPage: limit,
         totalCount: this.totalCountHeader
       };
     }
@@ -60,10 +59,7 @@ class JsonServerApi extends RESTDataSource {
     }
 
     const paginationParams = [];
-    paginationParams.push(
-      `_limit=${limit || this.defaultLimit}`,
-      `_page=${page || "1"}`
-    );
+    paginationParams.push(`_limit=${limit}`, `_page=${page || "1"}`);
 
     const [sort, order] = orderBy ? orderBy.toLowerCase().split("_") : [];
     const otherParams = Object.keys(rest).map(key => `${key}=${rest[key]}`);

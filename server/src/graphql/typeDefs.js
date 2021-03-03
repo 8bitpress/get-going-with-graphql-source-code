@@ -1,6 +1,10 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+  # SCALARS
+
+  scalar DateTime
+
   # ENUMS
 
   """
@@ -163,7 +167,7 @@ const typeDefs = gql`
     "The user's integer-based rating of the book (from 1 to 5)."
     rating: Int!
     "The date and time the review was created."
-    reviewedOn: String!
+    reviewedOn: DateTime!
     "The user who submitted the book review."
     reviewer: User!
     "The text-based content of the review."

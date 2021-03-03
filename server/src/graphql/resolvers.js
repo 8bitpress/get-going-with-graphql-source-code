@@ -1,4 +1,10 @@
+import DateTimeType from "./scalars/DateTimeType.js";
+
 const resolvers = {
+  // SCALARS
+
+  DateTime: DateTimeType,
+
   // ENUMS
 
   AuthorOrderBy: {

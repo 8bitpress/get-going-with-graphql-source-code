@@ -1,9 +1,12 @@
 import DateTimeType from "./scalars/DateTimeType.js";
+import RatingType from "./scalars/RatingType.js";
 
 const resolvers = {
   // SCALARS
 
   DateTime: DateTimeType,
+
+  Rating: RatingType,
 
   // ENUMS
 

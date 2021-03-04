@@ -5,6 +5,8 @@ const typeDefs = gql`
 
   scalar DateTime
 
+  scalar Rating
+
   # ENUMS
 
   """
@@ -165,7 +167,7 @@ const typeDefs = gql`
     "The book to which the review applies."
     book: Book
     "The user's integer-based rating of the book (from 1 to 5)."
-    rating: Int!
+    rating: Rating!
     "The date and time the review was created."
     reviewedOn: DateTime!
     "The user who submitted the book review."
@@ -239,7 +241,7 @@ const typeDefs = gql`
     "The unique ID of the book a user is reviewing."
     bookId: ID!
     "The user's integer-based rating of the book (from 1 to 5)."
-    rating: Int!
+    rating: Rating!
     "The ID of the user submitting the review."
     reviewerId: ID!
     "The text-based content of the review."
@@ -275,7 +277,7 @@ const typeDefs = gql`
     "The unique ID of the review a user is updating."
     id: ID!
     "The user's integer-based rating of the book (from 1 to 5)."
-    rating: Int!
+    rating: Rating!
     "The text-based content of the review."
     text: String
   }

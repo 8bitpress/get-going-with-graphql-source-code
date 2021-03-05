@@ -17,19 +17,20 @@ class JsonServerApi extends RESTDataSource {
 
   // UTILS
 
-  async checkUniqueUserData(email, username) {
-    const res = await Promise.all([
-      this.get(`/users?email=${email}`),
-      this.get(`/users?username=${username}`)
-    ]);
-    const [existingEmail, existingUsername] = res;
+  // This method is replaced with a custom directive
+  // async checkUniqueUserData(email, username) {
+  //   const res = await Promise.all([
+  //     this.get(`/users?email=${email}`),
+  //     this.get(`/users?username=${username}`)
+  //   ]);
+  //   const [existingEmail, existingUsername] = res;
 
-    if (existingEmail.length) {
-      throw new UserInputError("Email is already in use");
-    } else if (existingUsername.length) {
-      throw new UserInputError("Username already in use");
-    }
-  }
+  //   if (existingEmail.length) {
+  //     throw new UserInputError("Email is already in use");
+  //   } else if (existingUsername.length) {
+  //     throw new UserInputError("Username already in use");
+  //   }
+  // }
 
   parsePageInfo({ limit, page }) {
     if (this.totalCountHeader) {
@@ -267,8 +268,7 @@ class JsonServerApi extends RESTDataSource {
     });
   }
 
-  async signUp({ email, name, username }) {
-    await this.checkUniqueUserData(email, username);
+  signUp({ email, name, username }) {
     return this.post("/users", {
       createdAt: new Date().toISOString(),
       email,

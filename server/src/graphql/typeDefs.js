@@ -1,6 +1,19 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
+  # DIRECTIVES
+
+  directive @unique(
+    "The resource path name from the REST endpoint."
+    path: String!
+    """
+    The database key name upon which to force uniqueness.
+
+    If not provided, then the GraphQL schema field name will be used.
+    """
+    key: String
+  ) on INPUT_FIELD_DEFINITION
+
   # SCALARS
 
   scalar DateTime
@@ -253,11 +266,11 @@ const typeDefs = gql`
   """
   input SignUpInput {
     "The email address of the user (must be unique)."
-    email: String!
+    email: String! @unique(path: "users")
     "The full name of the user."
-    name: String
+    name: String!
     "The user's chosen username (must be unique)."
-    username: String!
+    username: String! @unique(path: "users")
   }
 
   """

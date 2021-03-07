@@ -2,7 +2,7 @@ import {
   AuthenticationError,
   ForbiddenError,
   UserInputError
-} from "apollo-server";
+} from "apollo-server-express";
 import { RESTDataSource } from "apollo-datasource-rest";
 import jwt from "jsonwebtoken";
 import parseLinkHeader from "parse-link-header";

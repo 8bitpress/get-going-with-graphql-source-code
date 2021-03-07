@@ -130,6 +130,9 @@ const resolvers = {
     deleteReview(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.deleteReview(id);
     },
+    login(root, args, { dataSources }, info) {
+      return dataSources.jsonServerApi.login(args);
+    },
     removeBooksFromLibrary(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.removeBooksFromLibrary(input);
     },

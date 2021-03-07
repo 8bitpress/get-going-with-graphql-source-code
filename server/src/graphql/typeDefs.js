@@ -347,6 +347,8 @@ const typeDefs = gql`
     searchPeople(query: String!, orderBy: SearchOrderBy): [Person]
     "Retrieves a single user by username."
     user(username: String!): User
+    "Retrieves the currently authenticated user."
+    viewer: User
   }
 
   type Mutation {

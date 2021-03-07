@@ -112,6 +112,12 @@ const resolvers = {
     },
     user(root, { username }, { dataSources }, info) {
       return dataSources.jsonServerApi.getUser(username);
+    },
+    viewer(root, args, { dataSources, user }, info) {
+      if (user?.username) {
+        return dataSources.jsonServerApi.getUser(user.username);
+      }
+      return null;
     }
   },
   Mutation: {

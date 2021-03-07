@@ -12,7 +12,11 @@ const port = process.env.GRAPHQL_API_PORT;
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
-  app.use(cors({ origin: "http://localhost:3000" }));
+  app.use(
+    cors({
+      origin: ["https://studio.apollographql.com", "http://localhost:3000"]
+    })
+  );
 }
 
 app.use(

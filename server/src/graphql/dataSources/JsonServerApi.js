@@ -290,7 +290,7 @@ class JsonServerApi extends RESTDataSource {
       password: passwordHash,
       username
     });
-    const token = jwt.sign({}, process.env.JWT_SECRET, {
+    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
       algorithm: "HS256",
       subject: user.id.toString(),
       expiresIn: "1d"
@@ -369,7 +369,7 @@ class JsonServerApi extends RESTDataSource {
       throw new AuthenticationError("Username or password is incorrect");
     }
 
-    const token = jwt.sign({}, process.env.JWT_SECRET, {
+    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
       algorithm: "HS256",
       subject: user.id.toString(),
       expiresIn: "1d"

@@ -124,6 +124,16 @@ const typeDefs = gql`
   }
 
   """
+  A currently authenticated user and their valid JWT.
+  """
+  type AuthPayload {
+    "The logged in user."
+    viewer: User
+    "A JWT issued at the time of the user's most recent authentication."
+    token: String
+  }
+
+  """
   A written work that can be attributed to one or more authors and can be reviewed by users.
   """
   type Book {
@@ -269,6 +279,13 @@ const typeDefs = gql`
     email: String! @unique(path: "users")
     "The full name of the user."
     name: String!
+    """
+    The user's chosen password.
+
+    It must be a minimum of 8 characters in length and contain 1 lowercase
+    letter, 1 uppercase letter, 1 number, and 1 special character.
+    """
+    password: String!
     "The user's chosen username (must be unique)."
     username: String! @unique(path: "users")
   }
@@ -345,8 +362,8 @@ const typeDefs = gql`
     deleteReview(id: ID!): Boolean!
     "Remove books currently in a user's library."
     removeBooksFromLibrary(input: UpdateLibraryBooksInput!): User!
-    "Create a new user."
-    signUp(input: SignUpInput!): User!
+    "Creates a new user."
+    signUp(input: SignUpInput!): AuthPayload!
     "Updates a review."
     updateReview(input: UpdateReviewInput!): Review!
   }

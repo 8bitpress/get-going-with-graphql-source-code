@@ -1,6 +1,10 @@
 import { ForbiddenError, UserInputError } from "apollo-server";
 import { RESTDataSource } from "apollo-datasource-rest";
+import jwt from "jsonwebtoken";
 import parseLinkHeader from "parse-link-header";
+import validator from "validator";
+
+import { hashPassword, verifyPassword } from "../../utils/passwords.js";
 
 class JsonServerApi extends RESTDataSource {
   baseURL = process.env.REST_API_BASE_URL;
@@ -268,13 +272,27 @@ class JsonServerApi extends RESTDataSource {
     });
   }
 
-  signUp({ email, name, username }) {
-    return this.post("/users", {
-      createdAt: new Date().toISOString(),
+  async signUp({ email, name, password, username }) {
+    if (!validator.isStrongPassword(password)) {
+      throw new UserInputError(
+        "Password must be a minimum of 8 characters in length and contain 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character."
+      );
+    }
+
+    const passwordHash = await hashPassword(password);
+    const user = await this.post("/users", {
       email,
       name,
+      password: passwordHash,
       username
     });
+    const token = jwt.sign({}, process.env.JWT_SECRET, {
+      algorithm: "HS256",
+      subject: user.id.toString(),
+      expiresIn: "1d"
+    });
+
+    return { token, viewer: user };
   }
 
   // UPDATE

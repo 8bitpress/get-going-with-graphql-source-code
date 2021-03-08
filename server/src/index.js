@@ -1,9 +1,11 @@
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, makeExecutableSchema } from "apollo-server-express";
+import { applyMiddleware } from "graphql-middleware";
 import cors from "cors";
 import express from "express";
 import expressJwt from "express-jwt";
 
 import JsonServerApi from "./graphql/dataSources/JsonServerApi.js";
+import permissions from "./graphql/permissions.js";
 import resolvers from "./graphql/resolvers.js";
 import typeDefs from "./graphql/typeDefs.js";
 import UniqueDirective from "./graphql/directives/UniqueDirective.js";
@@ -27,16 +29,20 @@ app.use(
   })
 );
 
-const server = new ApolloServer({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
+  schemaDirectives: {
+    unique: UniqueDirective
+  }
+});
+
+const server = new ApolloServer({
+  schema: applyMiddleware(schema, permissions),
   dataSources: () => {
     return {
       jsonServerApi: new JsonServerApi()
     };
-  },
-  schemaDirectives: {
-    unique: UniqueDirective
   },
   context: ({ req }) => {
     const user = req.user || null;

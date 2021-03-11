@@ -1,5 +1,11 @@
+import MainLayout from "../../components/MainLayout";
+
 function Index() {
-  return <p>This is the index page.</p>;
+  return (
+    <MainLayout>
+      <p>This is the index page.</p>
+    </MainLayout>
+  );
 }
 
 export default Index;

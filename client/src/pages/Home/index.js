@@ -1,5 +1,11 @@
+import MainLayout from "../../components/MainLayout";
+
 function Home() {
-  return <p>This is a user's home page.</p>;
+  return (
+    <MainLayout>
+      <p>This is a user's home page.</p>
+    </MainLayout>
+  );
 }
 
 export default Home;

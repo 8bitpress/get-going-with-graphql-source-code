@@ -1,3 +1,8 @@
 @tailwind base;
+
+h1 {
+  @apply font-bold leading-none text-5xl;
+}
+
 @tailwind components;
 @tailwind utilities;

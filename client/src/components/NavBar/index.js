@@ -16,7 +16,8 @@ function NavBar() {
         </Link>
         <div>
           <Button
-            onClick={() => {
+            onClick={event => {
+              event.preventDefault();
               history.push("/login");
             }}
             text="Log In"

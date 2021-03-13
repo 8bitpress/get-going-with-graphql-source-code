@@ -4,5 +4,25 @@ h1 {
   @apply font-bold leading-none text-5xl;
 }
 
+.loader {
+  @apply inline-block h-12 w-12;
+}
+
+.loader:after {
+  @apply block border-4 border-solid rounded-full h-12 w-12;
+  animation: spin 1.2s linear infinite;
+  border-color: #cbd5e0 transparent #cbd5e0 transparent;
+  content: " ";
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @tailwind components;
 @tailwind utilities;

@@ -4,6 +4,8 @@ import cors from "cors";
 import express from "express";
 import expressJwt from "express-jwt";
 
+import { getToken, handleInvalidToken } from "./utils/tokens.js";
+import cookieHeaderPlugin from "./graphql/plugins/cookieHeaderPlugin.js";
 import JsonServerApi from "./graphql/dataSources/JsonServerApi.js";
 import permissions from "./graphql/permissions.js";
 import resolvers from "./graphql/resolvers.js";
@@ -25,14 +27,10 @@ app.use(
   expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: ["HS256"],
-    credentialsRequired: false
+    credentialsRequired: false,
+    getToken
   }),
-  (err, req, res, next) => {
-    if (err.code === "invalid_token") {
-      return next();
-    }
-    return next(err);
-  }
+  handleInvalidToken
 );
 
 const schema = makeExecutableSchema({
@@ -53,10 +51,11 @@ const server = new ApolloServer({
   context: ({ req }) => {
     const user = req.user || null;
     return { user };
-  }
+  },
+  plugins: [cookieHeaderPlugin]
 });
 
-server.applyMiddleware({ app, path: "/", cors: false });
+server.applyMiddleware({ app, cors: false });
 
 app.listen({ port }, () =>
   console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)

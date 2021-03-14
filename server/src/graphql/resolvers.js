@@ -139,6 +139,9 @@ const resolvers = {
     login(root, args, { dataSources }, info) {
       return dataSources.jsonServerApi.login(args);
     },
+    logout(root, args, context, info) {
+      return true;
+    },
     removeBooksFromLibrary(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.removeBooksFromLibrary(input);
     },

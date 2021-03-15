@@ -22,6 +22,11 @@ function AuthProvider({ children }) {
     }
   };
 
+  const clearSessionData = () => {
+    localStorage.removeItem("token_expires_at");
+    setViewer(null);
+  };
+
   const isAuthenticated = () => {
     const expiresAt = localStorage.getItem("token_expires_at");
     return expiresAt ? new Date().getTime() < expiresAt : false;
@@ -53,6 +58,7 @@ function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         checkingSession,
+        clearSessionData,
         error,
         isAuthenticated,
         persistSessionData,

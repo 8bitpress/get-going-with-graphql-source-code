@@ -11,6 +11,12 @@ export const Login = gql`
   ${viewerAndToken}
 `;
 
+export const Logout = gql`
+  mutation Logout {
+    logout
+  }
+`;
+
 export const SignUp = gql`
   mutation SignUp($input: SignUpInput!) {
     signUp(input: $input) {

@@ -5,9 +5,11 @@ export const GetBooks = gql`
     books(limit: $limit, orderBy: TITLE_ASC, page: $page) {
       results {
         authors {
+          id
           name
         }
         cover
+        id
         title
       }
       pageInfo {

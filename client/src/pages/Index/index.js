@@ -29,7 +29,7 @@ function Index() {
         </div>
         {hasNextPage && (
           <div className="flex justify-center">
-            <Button primary text="Load More" type="button" />
+            <Button text="Load More" type="button" />
           </div>
         )}
       </>

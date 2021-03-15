@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Login as LoginMutation } from "../../graphql/mutations";
 import { SignUp } from "../../graphql/mutations";
+import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 
@@ -11,12 +12,21 @@ function Login() {
   const [isMember, setIsMember] = useState(true);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const history = useHistory();
+  const { persistSessionData } = useAuth();
 
-  const [login, { loading, error }] = useMutation(LoginMutation);
-  const [signUp] = useMutation(SignUp);
+  const onCompleted = data => {
+    const { token, viewer } = Object.entries(data)[0][1];
+    persistSessionData({ token, viewer });
+    history.push("/home");
+  };
+
+  const [login, { error, loading }] = useMutation(LoginMutation, {
+    onCompleted
+  });
+  const [signUp] = useMutation(SignUp, { onCompleted });
 
   return (
     <div className="bg-gray-50 flex items-center justify-center min-h-screen">
@@ -37,8 +47,6 @@ function Login() {
                 console.error(err);
               });
             }
-
-            history.push("/home");
           }}
         >
           <TextInput

@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { AuthProvider } from "./context/AuthContext";
 import client from "./graphql/apollo";
 import Routes from "./routes";
 
@@ -11,9 +12,11 @@ import "./index.css";
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Router>
-        <Routes />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes />
+        </Router>
+      </AuthProvider>
     </ApolloProvider>
   );
 }

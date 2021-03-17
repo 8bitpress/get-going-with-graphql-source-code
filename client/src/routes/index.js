@@ -1,15 +1,17 @@
-import { Route, Switch } from "react-router";
+import { Switch } from "react-router";
 
 import Index from "../pages/Index";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import PrivateRoute from "../components/PrivateRoute";
+import PublicRoute from "../components/PublicRoute";
 
 function Routes() {
   return (
     <Switch>
-      <Route exact path="/" component={Index} />
-      <Route exact path="/home" component={Home} />
-      <Route exact path="/login" component={Login} />
+      <PublicRoute exact path="/" component={Index} />
+      <PrivateRoute exact path="/home" component={Home} />
+      <PublicRoute exact path="/login" component={Login} />
     </Switch>
   );
 }

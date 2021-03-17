@@ -33,7 +33,7 @@ function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const authenticate = async () => {
+    const getViewerIfAuthenticated = async () => {
       if (isAuthenticated() && !viewer) {
         try {
           const { data, error: viewerError, loading } = await client.query({
@@ -51,7 +51,7 @@ function AuthProvider({ children }) {
       }
       setCheckingSession(false);
     };
-    authenticate();
+    getViewerIfAuthenticated();
   }, [client, viewer]);
 
   return (

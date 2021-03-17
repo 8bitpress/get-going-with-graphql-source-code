@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
@@ -14,8 +14,8 @@ function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const { isAuthenticated, persistSessionData } = useAuth();
   const history = useHistory();
-  const { persistSessionData } = useAuth();
 
   const onCompleted = data => {
     const { token, viewer } = Object.entries(data)[0][1];
@@ -28,7 +28,9 @@ function Login() {
   });
   const [signUp] = useMutation(SignUp, { onCompleted });
 
-  return (
+  return isAuthenticated() ? (
+    <Redirect to="/home" />
+  ) : (
     <div className="bg-gray-50 flex items-center justify-center min-h-screen">
       <div className="bg-white shadow p-8 max-w-sm w-10/12">
         <h1 className="mb-4 text-2xl">Welcome to Bibliotech</h1>

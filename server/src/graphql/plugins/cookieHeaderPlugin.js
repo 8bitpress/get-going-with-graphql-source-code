@@ -4,7 +4,7 @@ const cookieHeaderPlugin = {
   requestDidStart() {
     return {
       willSendResponse({ operation, response }) {
-        if (operation.operation === "mutation") {
+        if (operation?.operation === "mutation") {
           const authMutation = operation.selectionSet.selections.find(
             selection =>
               selection.name.value === "login" ||

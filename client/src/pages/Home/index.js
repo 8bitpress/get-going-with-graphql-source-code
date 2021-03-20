@@ -8,8 +8,9 @@ import PageNotice from "../../components/PageNotice";
 import MainLayout from "../../components/MainLayout";
 
 function Home() {
-  const { data, error, loading } = useQuery(GetViewerLibrary, {
-    variables: { limit: 12, page: 1 }
+  const LIMIT = 12;
+  const { data, error, fetchMore, loading } = useQuery(GetViewerLibrary, {
+    variables: { limit: LIMIT, page: 1 }
   });
 
   let content;
@@ -38,7 +39,18 @@ function Home() {
         </div>
         {hasNextPage && (
           <div className="flex justify-center">
-            <Button text="Load More" type="button" />
+            <Button
+              text="Load More"
+              onClick={() => {
+                fetchMore({
+                  variables: {
+                    limit: LIMIT,
+                    page: data.viewer.library.results.length / LIMIT + 1
+                  }
+                });
+              }}
+              type="button"
+            />
           </div>
         )}
       </>

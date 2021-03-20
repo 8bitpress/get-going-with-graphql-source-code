@@ -2,6 +2,7 @@ function mergePageResults(keyArgs = false) {
   return {
     keyArgs,
     merge(existing, incoming, { args: { page, limit } }) {
+      console.log(existing, incoming);
       const { __typeName, pageInfo, results } = incoming;
       const mergedResults = existing?.results.length
         ? existing.results.slice(0)
@@ -19,6 +20,11 @@ const typePolicies = {
   Book: {
     fields: {
       reviews: mergePageResults()
+    }
+  },
+  User: {
+    fields: {
+      library: mergePageResults()
     }
   },
   Query: {

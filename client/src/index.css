@@ -4,6 +4,14 @@ h1 {
   @apply font-bold leading-none text-5xl;
 }
 
+h2 {
+  @apply font-bold leading-none text-4xl text-gray-700;
+}
+
+h3 {
+  @apply font-bold leading-none text-3xl text-gray-700;
+}
+
 .loader {
   @apply inline-block h-12 w-12;
 }

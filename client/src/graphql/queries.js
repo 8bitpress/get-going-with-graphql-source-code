@@ -1,19 +1,52 @@
 import { gql } from "@apollo/client";
 
-import { gridBook } from "./fragments";
+import { basicBook } from "./fragments";
+
+export const GetBook = gql`
+  query GetBook($id: ID!, $reviewsLimit: Int, $reviewsPage: Int) {
+    book(id: $id) {
+      ...basicBook
+      summary
+      reviews(
+        limit: $reviewsLimit
+        orderBy: REVIEWED_ON_DESC
+        page: $reviewsPage
+      ) {
+        results {
+          id
+          book {
+            id
+          }
+          reviewedOn
+          rating
+          reviewer {
+            id
+            name
+            username
+          }
+          text
+        }
+        pageInfo {
+          hasNextPage
+        }
+      }
+    }
+  }
+  ${basicBook}
+`;
 
 export const GetBooks = gql`
   query GetBooks($limit: Int, $page: Int) {
     books(limit: $limit, orderBy: TITLE_ASC, page: $page) {
       results {
-        ...gridBook
+        ...basicBook
       }
       pageInfo {
         hasNextPage
       }
     }
   }
-  ${gridBook}
+  ${basicBook}
 `;
 
 export const GetViewer = gql`
@@ -33,7 +66,7 @@ export const GetViewerLibrary = gql`
       id
       library(limit: $limit, orderBy: ADDED_ON_DESC, page: $page) {
         results {
-          ...gridBook
+          ...basicBook
         }
         pageInfo {
           hasNextPage
@@ -41,5 +74,5 @@ export const GetViewerLibrary = gql`
       }
     }
   }
-  ${gridBook}
+  ${basicBook}
 `;

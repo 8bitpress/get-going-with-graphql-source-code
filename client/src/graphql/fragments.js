@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const gridBook = gql`
-  fragment gridBook on Book {
+export const basicBook = gql`
+  fragment basicBook on Book {
     authors {
       id
       name

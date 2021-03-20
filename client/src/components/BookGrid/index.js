@@ -1,10 +1,17 @@
+import { useHistory } from "react-router-dom";
+
 function BookGrid({ books }) {
+  const history = useHistory();
+
   return (
     <ul className="gap-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {books.map(({ authors, cover, id, title }) => (
         <li
           className="bg-white cursor-pointer flex flex-col justify-end p-4 shadow-xl"
           key={id}
+          onClick={() => {
+            history.push(`/book/${id}`);
+          }}
         >
           <div className="flex flex-1 items-center justify-center">
             {cover ? (

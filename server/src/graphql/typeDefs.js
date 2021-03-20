@@ -88,7 +88,9 @@ const typeDefs = gql`
   Specifies fields shared by people (including authors and users).
   """
   interface Person {
+    "The unique ID of the person."
     id: ID!
+    "The full name of the person."
     name: String!
   }
 
@@ -151,6 +153,8 @@ const typeDefs = gql`
     Default sort order is REVIEWED_ON_DESC.
     """
     reviews(limit: Int = 20, orderBy: ReviewOrderBy, page: Int): Reviews
+    "A brief description of the book's content."
+    summary: String
     "The title of the book."
     title: String!
   }

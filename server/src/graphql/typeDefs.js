@@ -157,6 +157,8 @@ const typeDefs = gql`
     summary: String
     "The title of the book."
     title: String!
+    "A boolean indicating if the viewing user has added this book to their library."
+    viewerHasInLibrary: Boolean
   }
 
   """

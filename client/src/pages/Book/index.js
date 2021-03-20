@@ -1,7 +1,12 @@
+import { useMutation, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
 
+import {
+  AddBooksToLibrary,
+  RemoveBooksFromLibrary
+} from "../../graphql/mutations";
 import { GetBook } from "../../graphql/queries";
+import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import MainLayout from "../../components/MainLayout";
@@ -10,10 +15,21 @@ import ReviewsList from "../../components/ReviewList";
 
 function Book() {
   const { id } = useParams();
+  const { viewer } = useAuth();
   const REVIEW_LIMIT = 20;
 
   const { data, error, fetchMore, loading } = useQuery(GetBook, {
     variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 }
+  });
+  const [addBooksToLibrary] = useMutation(AddBooksToLibrary, {
+    update: cache => {
+      updateViewerHasInLibrary(cache, id);
+    }
+  });
+  const [removeBooksFromLibrary] = useMutation(RemoveBooksFromLibrary, {
+    update: cache => {
+      updateViewerHasInLibrary(cache, id);
+    }
   });
 
   let content;
@@ -22,7 +38,7 @@ function Book() {
     content = <Loader centered />;
   } else if (data?.book) {
     const {
-      book: { authors, cover, reviews, summary, title }
+      book: { authors, cover, reviews, summary, title, viewerHasInLibrary }
     } = data;
     content = (
       <div className="bg-white p-8 shadow-xl">
@@ -51,6 +67,25 @@ function Book() {
               <p className="mb-4 italic text-gray-400">
                 Book summary unavailable.
               </p>
+            )}
+            {viewer && (
+              <Button
+                className="mt-4"
+                onClick={() => {
+                  const variables = {
+                    input: { bookIds: [id], userId: viewer.id }
+                  };
+
+                  if (viewerHasInLibrary) {
+                    removeBooksFromLibrary({ variables });
+                  } else {
+                    addBooksToLibrary({ variables });
+                  }
+                }}
+                text={
+                  viewerHasInLibrary ? "Remove from Library" : "Add to Library"
+                }
+              />
             )}
           </div>
         </div>
@@ -86,6 +121,23 @@ function Book() {
   }
 
   return <MainLayout>{content}</MainLayout>;
+}
+
+function updateViewerHasInLibrary(cache, id) {
+  const { book } = cache.readQuery({
+    query: GetBook,
+    variables: { id }
+  });
+
+  cache.writeQuery({
+    query: GetBook,
+    data: {
+      book: {
+        ...book,
+        viewerHasInLibrary: !book.viewerHasInLibrary
+      }
+    }
+  });
 }
 
 export default Book;

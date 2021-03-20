@@ -7,6 +7,7 @@ export const GetBook = gql`
     book(id: $id) {
       ...basicBook
       summary
+      viewerHasInLibrary
       reviews(
         limit: $reviewsLimit
         orderBy: REVIEWED_ON_DESC

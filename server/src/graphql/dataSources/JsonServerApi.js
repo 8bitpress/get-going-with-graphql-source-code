@@ -84,6 +84,11 @@ class JsonServerApi extends RESTDataSource {
 
   // READ
 
+  async checkViewerHasInLibrary(id, bookId) {
+    const response = await this.get(`/userBooks?userId=${id}&bookId=${bookId}`);
+    return !!response.length;
+  }
+
   getAuthorById(id) {
     return this.get(`/authors/${id}`).catch(
       err => err.message === "404: Not Found" && null

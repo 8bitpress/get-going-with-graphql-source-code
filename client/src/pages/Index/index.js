@@ -8,8 +8,9 @@ import MainLayout from "../../components/MainLayout";
 import PageNotice from "../../components/PageNotice";
 
 function Index() {
-  const { data, error, loading } = useQuery(GetBooks, {
-    variables: { limit: 12, page: 1 }
+  const LIMIT = 12;
+  const { data, error, fetchMore, loading } = useQuery(GetBooks, {
+    variables: { limit: LIMIT, page: 1 }
   });
 
   let content;
@@ -29,7 +30,18 @@ function Index() {
         </div>
         {hasNextPage && (
           <div className="flex justify-center">
-            <Button text="Load More" type="button" />
+            <Button
+              onClick={() => {
+                fetchMore({
+                  variables: {
+                    limit: LIMIT,
+                    page: data.books.results.length / LIMIT + 1
+                  }
+                });
+              }}
+              text="Load More"
+              type="button"
+            />
           </div>
         )}
       </>

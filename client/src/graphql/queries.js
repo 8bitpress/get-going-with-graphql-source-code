@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-import { basicBook } from "./fragments";
+import { basicBook, fullReview } from "./fragments";
 
 export const GetBook = gql`
   query GetBook($id: ID!, $reviewsLimit: Int, $reviewsPage: Int) {
@@ -8,24 +8,14 @@ export const GetBook = gql`
       ...basicBook
       summary
       viewerHasInLibrary
+      viewerHasReviewed
       reviews(
         limit: $reviewsLimit
         orderBy: REVIEWED_ON_DESC
         page: $reviewsPage
       ) {
         results {
-          id
-          book {
-            id
-          }
-          reviewedOn
-          rating
-          reviewer {
-            id
-            name
-            username
-          }
-          text
+          ...fullReview
         }
         pageInfo {
           hasNextPage
@@ -34,6 +24,7 @@ export const GetBook = gql`
     }
   }
   ${basicBook}
+  ${fullReview}
 `;
 
 export const GetBooks = gql`

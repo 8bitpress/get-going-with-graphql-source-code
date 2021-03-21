@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import {
   AddBooksToLibrary,
@@ -16,10 +16,12 @@ import ReviewsList from "../../components/ReviewList";
 function Book() {
   const { id } = useParams();
   const { viewer } = useAuth();
+  const history = useHistory();
   const REVIEW_LIMIT = 20;
 
   const { data, error, fetchMore, loading } = useQuery(GetBook, {
-    variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 }
+    variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 },
+    fetchPolicy: "cache-and-network"
   });
   const [addBooksToLibrary] = useMutation(AddBooksToLibrary, {
     update: cache => {
@@ -38,8 +40,17 @@ function Book() {
     content = <Loader centered />;
   } else if (data?.book) {
     const {
-      book: { authors, cover, reviews, summary, title, viewerHasInLibrary }
+      book: {
+        authors,
+        cover,
+        reviews,
+        summary,
+        title,
+        viewerHasInLibrary,
+        viewerHasReviewed
+      }
     } = data;
+
     content = (
       <div className="bg-white p-8 shadow-xl">
         <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between border-b border-gray-300 border-solid pb-8">
@@ -90,7 +101,18 @@ function Book() {
           </div>
         </div>
         <div className="mt-8">
-          <h3 className="mb-4 sm:mb-0">What Readers Say</h3>
+          <div className="sm:flex sm:justify-between">
+            <h3 className="mb-4 sm:mb-0">What Readers Say</h3>
+            {viewer && !viewerHasReviewed && (
+              <Button
+                onClick={() => {
+                  history.push(`/book/${id}/review`);
+                }}
+                primary
+                text="Add a Review"
+              />
+            )}
+          </div>
           {reviews.results.length ? (
             <div>
               <ReviewsList reviews={reviews.results} />

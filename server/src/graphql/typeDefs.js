@@ -159,6 +159,8 @@ const typeDefs = gql`
     title: String!
     "A boolean indicating if the viewing user has added this book to their library."
     viewerHasInLibrary: Boolean
+    "A boolean indicating if the viewing user has reviewed the book."
+    viewerHasReviewed: Boolean
   }
 
   """

@@ -66,8 +66,13 @@ const resolvers = {
       return dataSources.jsonServerApi.getBookReviews(book.id, args);
     },
     viewerHasInLibrary(book, args, { dataSources, user }, info) {
-      return user
+      return user?.sub
         ? dataSources.jsonServerApi.checkViewerHasInLibrary(user.sub, book.id)
+        : null;
+    },
+    viewerHasReviewed(book, args, { dataSources, user }, info) {
+      return user?.sub
+        ? dataSources.jsonServerApi.checkViewerHasReviewed(user.sub, book.id)
         : null;
     }
   },

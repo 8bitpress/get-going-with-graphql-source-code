@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-import { viewerAndToken } from "./fragments";
+import { fullReview, viewerAndToken } from "./fragments";
 
 export const AddBooksToLibrary = gql`
   mutation AddBooksToLibrary($input: UpdateLibraryBooksInput!) {
@@ -8,6 +8,15 @@ export const AddBooksToLibrary = gql`
       id
     }
   }
+`;
+
+export const CreateReview = gql`
+  mutation CreateReview($input: CreateReviewInput!) {
+    createReview(input: $input) {
+      ...fullReview
+    }
+  }
+  ${fullReview}
 `;
 
 export const Login = gql`

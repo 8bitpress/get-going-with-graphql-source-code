@@ -12,6 +12,23 @@ export const basicBook = gql`
   }
 `;
 
+export const fullReview = gql`
+  fragment fullReview on Review {
+    id
+    book {
+      id
+    }
+    reviewedOn
+    rating
+    reviewer {
+      id
+      name
+      username
+    }
+    text
+  }
+`;
+
 export const viewerAndToken = gql`
   fragment viewerAndToken on AuthPayload {
     viewer {

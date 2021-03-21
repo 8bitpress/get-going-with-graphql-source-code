@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import PrivateRoute from "../components/PrivateRoute";
 import PublicRoute from "../components/PublicRoute";
+import Search from "../pages/Search";
 
 function Routes() {
   return (
@@ -14,6 +15,7 @@ function Routes() {
       <PrivateRoute exact path="/home" component={Home} />
       <PublicRoute exact path="/login" component={Login} />
       <PublicRoute exact path="/book/:id" component={Book} />
+      <PublicRoute exact path="/search" component={Search} />
     </Switch>
   );
 }

@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import MainLayout from "../../components/MainLayout";
 import PageNotice from "../../components/PageNotice";
+import SearchBooksForm from "../../components/SearchBooksForm";
 
 function Index() {
   const LIMIT = 12;
@@ -26,6 +27,7 @@ function Index() {
     content = (
       <>
         <div className="mb-8">
+          <SearchBooksForm />
           <BookGrid books={results} />
         </div>
         {hasNextPage && (

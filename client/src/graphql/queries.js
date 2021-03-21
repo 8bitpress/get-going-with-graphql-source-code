@@ -77,3 +77,19 @@ export const GetViewerLibrary = gql`
   }
   ${basicBook}
 `;
+
+export const SearchBooks = gql`
+  query SearchBooks($query: String!) {
+    searchBooks(query: $query, orderBy: RESULT_ASC) {
+      ... on Book {
+        ...basicBook
+      }
+      ... on Author {
+        books {
+          ...basicBook
+        }
+      }
+    }
+  }
+  ${basicBook}
+`;

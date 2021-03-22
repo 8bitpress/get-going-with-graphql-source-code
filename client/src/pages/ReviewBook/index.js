@@ -1,24 +1,42 @@
 import { useHistory, useParams } from "react-router-dom";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 
-import { CreateReview } from "../../graphql/mutations";
+import { CreateReview, UpdateReview } from "../../graphql/mutations";
+import { GetReview } from "../../graphql/queries";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/Button";
+import Loader from "../../components/Loader";
 import MainLayout from "../../components/MainLayout";
 import PageNotice from "../../components/PageNotice";
 import Select from "../../components/Select";
 import TextInput from "../../components/TextInput";
 
 function ReviewBook() {
-  const { bookId } = useParams();
+  const { bookId, reviewId } = useParams();
   const { viewer, error: viewerError } = useAuth();
   const history = useHistory();
 
   const [rating, setRating] = useState("5");
   const [text, setText] = useState("");
 
+  const { loading, error } = useQuery(GetReview, {
+    variables: { id: reviewId },
+    skip: !reviewId || !viewer,
+    onCompleted: data => {
+      if (data?.review) {
+        setRating(data.review.rating);
+        setText(data.review.text);
+      }
+    }
+  });
+
   const [createReview] = useMutation(CreateReview, {
+    onCompleted: () => {
+      history.push(`/book/${bookId}`);
+    }
+  });
+  const [updateReview] = useMutation(UpdateReview, {
     onCompleted: () => {
       history.push(`/book/${bookId}`);
     }
@@ -27,26 +45,44 @@ function ReviewBook() {
   const handleSubmit = event => {
     event.preventDefault();
 
-    createReview({
-      variables: {
-        input: {
-          bookId,
-          rating: parseInt(rating),
-          reviewerId: viewer.id,
-          text
+    if (reviewId) {
+      updateReview({
+        variables: {
+          input: {
+            id: reviewId,
+            rating: parseInt(rating),
+            text
+          }
         }
-      }
-    }).catch(err => {
-      console.error(err);
-    });
+      }).catch(err => {
+        console.error(err);
+      });
+    } else {
+      createReview({
+        variables: {
+          input: {
+            bookId,
+            rating: parseInt(rating),
+            reviewerId: viewer.id,
+            text
+          }
+        }
+      }).catch(err => {
+        console.error(err);
+      });
+    }
   };
 
   let content;
 
-  if (viewer) {
+  if (loading) {
+    content = <Loader centered />;
+  } else if (viewer) {
     content = (
       <div className="bg-white p-8 shadow-xl">
-        <h2 className="mb-8">Create a New Review</h2>
+        <h2 className="mb-8">
+          {reviewId ? "Update Review" : "Create a New Review"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <Select
             className="mb-6"
@@ -81,7 +117,7 @@ function ReviewBook() {
         </form>
       </div>
     );
-  } else if (viewerError) {
+  } else if (error || viewerError) {
     content = <PageNotice text="Something went wrong. Please try again!" />;
   }
 

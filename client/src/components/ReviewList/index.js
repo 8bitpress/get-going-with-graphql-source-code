@@ -1,6 +1,11 @@
+import { useHistory } from "react-router-dom";
 import dayjs from "dayjs";
 
-function ReviewsList({ reviews }) {
+import Button from "../../components/Button";
+
+function ReviewsList({ bookId, reviews, viewerId }) {
+  const history = useHistory();
+
   return reviews.map(({ createdAt, id, rating, reviewer, text }) => (
     <div className="pt-10" key={id}>
       <div className="sm:flex sm:justify-between mb-4 sm:mb-0">
@@ -15,6 +20,16 @@ function ReviewsList({ reviews }) {
             Reviewed on {dayjs(createdAt).format("MMMM D, YYYY")}
           </p>
         </div>
+        {viewerId === reviewer.id && (
+          <div>
+            <Button
+              onClick={() => {
+                history.push(`/book/${bookId}/review/${id}`);
+              }}
+              text="Update"
+            />
+          </div>
+        )}
       </div>
       <p>{text}</p>
     </div>

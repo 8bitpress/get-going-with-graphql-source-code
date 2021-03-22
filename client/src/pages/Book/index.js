@@ -106,7 +106,7 @@ function Book() {
             {viewer && !viewerHasReviewed && (
               <Button
                 onClick={() => {
-                  history.push(`/book/${id}/review`);
+                  history.push(`/book/${id}/review/new`);
                 }}
                 primary
                 text="Add a Review"
@@ -115,7 +115,11 @@ function Book() {
           </div>
           {reviews.results.length ? (
             <div>
-              <ReviewsList reviews={reviews.results} />
+              <ReviewsList
+                bookId={id}
+                reviews={reviews.results}
+                viewerId={viewer?.id || null}
+              />
               {reviews.pageInfo.hasNextPage && (
                 <Button
                   className="mt-4"

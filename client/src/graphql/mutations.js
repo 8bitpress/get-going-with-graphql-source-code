@@ -50,3 +50,12 @@ export const SignUp = gql`
   }
   ${viewerAndToken}
 `;
+
+export const UpdateReview = gql`
+  mutation UpdateReview($input: UpdateReviewInput!) {
+    updateReview(input: $input) {
+      ...fullReview
+    }
+  }
+  ${fullReview}
+`;

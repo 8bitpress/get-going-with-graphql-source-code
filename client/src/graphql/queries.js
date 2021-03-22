@@ -41,6 +41,16 @@ export const GetBooks = gql`
   ${basicBook}
 `;
 
+export const GetReview = gql`
+  query GetReview($id: ID!) {
+    review(id: $id) {
+      id
+      rating
+      text
+    }
+  }
+`;
+
 export const GetViewer = gql`
   query GetViewer {
     viewer {

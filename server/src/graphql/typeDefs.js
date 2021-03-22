@@ -369,7 +369,7 @@ const typeDefs = gql`
     "Creates a new review."
     createReview(input: CreateReviewInput!): Review!
     "Deletes a review."
-    deleteReview(id: ID!): Boolean!
+    deleteReview(id: ID!): ID!
     "Authenticates an existing user."
     login(password: String!, username: String!): AuthPayload!
     "Logs an authenticated user out."

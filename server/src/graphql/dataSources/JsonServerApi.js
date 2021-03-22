@@ -361,7 +361,7 @@ class JsonServerApi extends RESTDataSource {
 
   async deleteReview(id) {
     await this.delete(`/reviews/${id}`);
-    return true;
+    return id;
   }
 
   // LOGIN

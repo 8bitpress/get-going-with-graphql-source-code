@@ -3,7 +3,7 @@ function mergePageResults(keyArgs = false) {
     keyArgs,
     merge(existing, incoming, { args: { page, limit } }) {
       const { __typeName, pageInfo, results } = incoming;
-      const mergedResults = existing?.results.length
+      const mergedResults = existing?.results?.length
         ? existing.results.slice(0)
         : [];
 

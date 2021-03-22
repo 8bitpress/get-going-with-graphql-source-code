@@ -1,10 +1,28 @@
 import { useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 import dayjs from "dayjs";
 
+import { DeleteReview } from "../../graphql/mutations";
 import Button from "../../components/Button";
 
 function ReviewsList({ bookId, reviews, viewerId }) {
   const history = useHistory();
+
+  const [deleteReview] = useMutation(DeleteReview, {
+    update: (cache, { data: { deleteReview } }) => {
+      cache.modify({
+        id: `Book:${bookId}`,
+        fields: {
+          reviews(existingReviewRefs, { readField }) {
+            return existingReviewRefs.results.filter(
+              reviewRef => deleteReview !== readField("id", reviewRef)
+            );
+          }
+        }
+      });
+      cache.evict({ id: `Review:${deleteReview}` });
+    }
+  });
 
   return reviews.map(({ createdAt, id, rating, reviewer, text }) => (
     <div className="pt-10" key={id}>
@@ -23,11 +41,22 @@ function ReviewsList({ bookId, reviews, viewerId }) {
         {viewerId === reviewer.id && (
           <div>
             <Button
+              className="block"
               onClick={() => {
                 history.push(`/book/${bookId}/review/${id}`);
               }}
               text="Update"
             />
+            <button
+              className="block m-auto mt-1 text-sm text-gray-600 hover:text-red-600"
+              onClick={() => {
+                deleteReview({ variables: { id } }).catch(err => {
+                  console.log(err);
+                });
+              }}
+            >
+              Delete
+            </button>
           </div>
         )}
       </div>

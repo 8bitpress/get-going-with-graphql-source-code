@@ -4,6 +4,7 @@ import Book from "../pages/Book";
 import Index from "../pages/Index";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import NewBook from "../pages/NewBook";
 import PrivateRoute from "../components/PrivateRoute";
 import PublicRoute from "../components/PublicRoute";
 import ReviewBook from "../pages/ReviewBook";
@@ -15,6 +16,7 @@ function Routes() {
       <PublicRoute exact path="/" component={Index} />
       <PrivateRoute exact path="/home" component={Home} />
       <PublicRoute exact path="/login" component={Login} />
+      <PrivateRoute exact path="/book/new" component={NewBook} />
       <PublicRoute exact path="/book/:id" component={Book} />
       <PrivateRoute
         exact

@@ -140,6 +140,9 @@ const resolvers = {
     createBook(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.createBook(input);
     },
+    createBookAndAuthors(root, { input }, { dataSources }, info) {
+      return dataSources.jsonServerApi.createBookAndAuthors(input);
+    },
     createReview(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.createReview(input);
     },

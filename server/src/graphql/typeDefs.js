@@ -266,6 +266,26 @@ const typeDefs = gql`
   }
 
   """
+  Provides data to create a book and any associated authors.
+  """
+  input CreateBookAndAuthorsInput {
+    "The names of the authors who wrote the book. Non-existent authors will be created."
+    authorNames: [String]
+    """
+    The URL of the book's cover image. Covers available via the Open Library Covers API:
+
+    https://openlibrary.org/dev/docs/api/covers
+    """
+    cover: String
+    "A literary genre to which the book can be assigned."
+    genre: Genre
+    "A short summary of the book's content."
+    summary: String
+    "The title of the book."
+    title: String!
+  }
+
+  """
   Provides data to create a review.
   """
   input CreateReviewInput {
@@ -346,13 +366,21 @@ const typeDefs = gql`
 
     Default sort order is RESULTS_ASC.
     """
-    searchBooks(query: String!, orderBy: SearchOrderBy): [BookResult]
+    searchBooks(
+      exact: Boolean = false
+      orderBy: SearchOrderBy
+      query: String!
+    ): [BookResult]
     """
     Performs a search of author and user names.
 
     Default sort order is RESULTS_ASC.
     """
-    searchPeople(query: String!, orderBy: SearchOrderBy): [Person]
+    searchPeople(
+      exact: Boolean = false
+      orderBy: SearchOrderBy
+      query: String!
+    ): [Person]
     "Retrieves a single user by username."
     user(username: String!): User
     "Retrieves the currently authenticated user."
@@ -366,6 +394,8 @@ const typeDefs = gql`
     createAuthor(name: String!): Author!
     "Creates a new book."
     createBook(input: CreateBookInput!): Book!
+    "Creates a new book and any of its authors that do not yet exist."
+    createBookAndAuthors(input: CreateBookAndAuthorsInput!): Book!
     "Creates a new review."
     createReview(input: CreateReviewInput!): Review!
     "Deletes a review."

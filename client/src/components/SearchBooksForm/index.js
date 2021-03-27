@@ -22,7 +22,7 @@ function SearchBooksForm() {
         }}
       >
         <TextInput
-          className="flex-auto max-w-xs mb-4 sm:mb-0 sm:mr-2"
+          className="flex-auto sm:max-w-xs mb-4 sm:mb-0 sm:mr-2 w-10/12"
           hiddenLabel
           id="query"
           inputWidthClass="w-full"

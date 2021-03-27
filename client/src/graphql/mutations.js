@@ -10,6 +10,20 @@ export const AddBooksToLibrary = gql`
   }
 `;
 
+export const CreateBookAndAuthors = gql`
+  mutation CreateBookAndAuthors($input: CreateBookAndAuthorsInput!) {
+    createBookAndAuthors(input: $input) {
+      id
+      authors {
+        name
+      }
+      cover
+      genre
+      title
+    }
+  }
+`;
+
 export const CreateReview = gql`
   mutation CreateReview($input: CreateReviewInput!) {
     createReview(input: $input) {

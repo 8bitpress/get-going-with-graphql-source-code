@@ -222,9 +222,9 @@ class JsonServerApi extends RESTDataSource {
     return results;
   }
 
-  async searchPeople({ query, orderBy = "RESULT_ASC" }) {
+  async searchPeople({ exact, query, orderBy = "RESULT_ASC" }) {
     const queryString = this.parseParams({
-      name_like: query,
+      ...(exact ? { name: query } : { q: query }),
       limit: 50
     });
     const authors = await this.get(`/authors${queryString}`);
@@ -254,7 +254,7 @@ class JsonServerApi extends RESTDataSource {
       title
     });
 
-    if (authorIds) {
+    if (authorIds?.length) {
       await Promise.all(
         authorIds.map(authorId =>
           this.post("/bookAuthors", {
@@ -266,6 +266,39 @@ class JsonServerApi extends RESTDataSource {
     }
 
     return book;
+  }
+
+  async createBookAndAuthors({ authorNames, ...args }) {
+    let authorIds = [];
+
+    if (authorNames?.length) {
+      const authorSearchResults = await Promise.all(
+        authorNames.map(authorName => this.get(`/authors?name=${authorName}`))
+      );
+      const existingAuthors = authorSearchResults.flat();
+      const existingAuthorIds = existingAuthors.map(author => author.id);
+      authorIds.push(...existingAuthorIds);
+
+      const authorsToCreate = existingAuthors.length
+        ? authorNames.filter(
+            authorName =>
+              !existingAuthors.find(author => author.name === authorName)
+          )
+        : authorNames;
+
+      const newAuthorIds = [];
+      if (authorsToCreate.length) {
+        const newAuthors = await Promise.all(
+          authorsToCreate.map(name => this.createAuthor(name))
+        );
+        newAuthors.forEach(newAuthor => {
+          newAuthorIds.push(newAuthor.id);
+        });
+      }
+      authorIds.push(...newAuthorIds);
+    }
+
+    return this.createBook({ authorIds, ...args });
   }
 
   async createReview({ bookId, rating, reviewerId, text }) {

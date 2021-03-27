@@ -70,7 +70,7 @@ class JsonServerApi extends RESTDataSource {
     const paginationParams = [];
     paginationParams.push(`_limit=${limit}`, `_page=${page || "1"}`);
 
-    const [sort, order] = orderBy ? orderBy.toLowerCase().split("_") : [];
+    const [sort, order] = orderBy ? orderBy.split("_") : [];
     const otherParams = Object.keys(rest).map(key => `${key}=${rest[key]}`);
     const queryString = [
       ...(sort ? [`_sort=${sort}`] : []),

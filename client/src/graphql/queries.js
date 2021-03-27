@@ -19,6 +19,7 @@ export const GetBook = gql`
         }
         pageInfo {
           hasNextPage
+          page
         }
       }
     }
@@ -35,6 +36,7 @@ export const GetBooks = gql`
       }
       pageInfo {
         hasNextPage
+        page
       }
     }
   }
@@ -72,6 +74,7 @@ export const GetViewerLibrary = gql`
         }
         pageInfo {
           hasNextPage
+          page
         }
       }
     }

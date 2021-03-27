@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@apollo/client";
 import { useHistory, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 
 import {
   AddBooksToLibrary,
@@ -21,7 +21,8 @@ function Book() {
 
   const { data, error, fetchMore, loading } = useQuery(GetBook, {
     variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 },
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first"
   });
   const [addBooksToLibrary] = useMutation(AddBooksToLibrary, {
     update: cache => {
@@ -36,7 +37,7 @@ function Book() {
 
   let content;
 
-  if (loading) {
+  if (loading && !data) {
     content = <Loader centered />;
   } else if (data?.book) {
     const {
@@ -127,7 +128,7 @@ function Book() {
                     fetchMore({
                       variables: {
                         reviewsLimit: REVIEW_LIMIT,
-                        reviewsPage: reviews.results.length / REVIEW_LIMIT + 1
+                        reviewsPage: reviews.pageInfo.page + 1
                       }
                     });
                   }}

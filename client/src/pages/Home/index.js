@@ -15,7 +15,7 @@ function Home() {
 
   let content;
 
-  if (loading) {
+  if (loading && !data) {
     content = <Loader centered />;
   } else if (data?.viewer && !data.viewer.library.results.length) {
     content = (
@@ -27,7 +27,7 @@ function Home() {
     );
   } else if (data?.viewer) {
     const {
-      pageInfo: { hasNextPage },
+      pageInfo: { hasNextPage, page },
       results
     } = data.viewer.library;
 
@@ -43,10 +43,7 @@ function Home() {
               text="Load More"
               onClick={() => {
                 fetchMore({
-                  variables: {
-                    limit: LIMIT,
-                    page: data.viewer.library.results.length / LIMIT + 1
-                  }
+                  variables: { limit: LIMIT, page: page + 1 }
                 });
               }}
               type="button"

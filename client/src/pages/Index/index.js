@@ -16,11 +16,11 @@ function Index() {
 
   let content;
 
-  if (loading) {
+  if (loading && !data) {
     content = <Loader centered />;
   } else if (data?.books) {
     const {
-      pageInfo: { hasNextPage },
+      pageInfo: { hasNextPage, page },
       results
     } = data.books;
 
@@ -35,10 +35,7 @@ function Index() {
             <Button
               onClick={() => {
                 fetchMore({
-                  variables: {
-                    limit: LIMIT,
-                    page: data.books.results.length / LIMIT + 1
-                  }
+                  variables: { limit: LIMIT, page: page + 1 }
                 });
               }}
               text="Load More"

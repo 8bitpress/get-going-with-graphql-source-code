@@ -1,8 +1,12 @@
+import http from "http";
+
 import { ApolloServer, makeExecutableSchema } from "apollo-server-express";
 import { applyMiddleware } from "graphql-middleware";
+import { useServer } from "graphql-ws/lib/use/ws";
 import cors from "cors";
 import express from "express";
 import expressJwt from "express-jwt";
+import ws from "ws";
 
 import { getToken, handleInvalidToken } from "./utils/tokens.js";
 import cookieHeaderPlugin from "./graphql/plugins/cookieHeaderPlugin.js";
@@ -40,9 +44,10 @@ const schema = makeExecutableSchema({
     unique: UniqueDirective
   }
 });
+const schemaWithPermissions = applyMiddleware(schema, permissions);
 
 const server = new ApolloServer({
-  schema: applyMiddleware(schema, permissions),
+  schema: schemaWithPermissions,
   dataSources: () => {
     return {
       jsonServerApi: new JsonServerApi()
@@ -56,7 +61,26 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app, cors: false });
+const httpServer = http.createServer(app);
 
-app.listen({ port }, () =>
-  console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
-);
+httpServer.listen(port, () => {
+  const wsServer = new ws.Server({ server: httpServer, path: "/graphql" });
+  useServer(
+    {
+      schema: schemaWithPermissions,
+      context: ctx => {
+        const jsonServerApi = new JsonServerApi();
+        jsonServerApi.initialize({ context: ctx, cache: undefined });
+        return { dataSources: { jsonServerApi } };
+      }
+    },
+    wsServer
+  );
+
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  );
+  console.log(
+    `🚀 Subscriptions ready at ws://localhost:${port}${wsServer.options.path}`
+  );
+});

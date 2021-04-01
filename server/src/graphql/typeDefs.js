@@ -411,6 +411,10 @@ const typeDefs = gql`
     "Updates a review."
     updateReview(input: UpdateReviewInput!): Review!
   }
+
+  type Subscription {
+    reviewAdded(bookId: ID!): Review
+  }
 `;
 
 export default typeDefs;

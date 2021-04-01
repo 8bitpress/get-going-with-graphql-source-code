@@ -1,5 +1,10 @@
+import { PubSub, withFilter } from "graphql-subscriptions";
+
 import DateTimeType from "./scalars/DateTimeType.js";
 import RatingType from "./scalars/RatingType.js";
+
+const pubsub = new PubSub();
+const REVIEW_ADDED = "REVIEW_ADDED";
 
 const resolvers = {
   // SCALARS
@@ -143,8 +148,10 @@ const resolvers = {
     createBookAndAuthors(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.createBookAndAuthors(input);
     },
-    createReview(root, { input }, { dataSources }, info) {
-      return dataSources.jsonServerApi.createReview(input);
+    async createReview(root, { input }, { dataSources }, info) {
+      const review = await dataSources.jsonServerApi.createReview(input);
+      pubsub.publish(REVIEW_ADDED, { reviewAdded: review });
+      return review;
     },
     deleteReview(root, { id }, { dataSources }, info) {
       return dataSources.jsonServerApi.deleteReview(id);
@@ -163,6 +170,18 @@ const resolvers = {
     },
     updateReview(root, { input }, { dataSources }, info) {
       return dataSources.jsonServerApi.updateReview(input);
+    }
+  },
+  Subscription: {
+    reviewAdded: {
+      subscribe: withFilter(
+        (root, args, context, info) => {
+          return pubsub.asyncIterator([REVIEW_ADDED]);
+        },
+        (payload, variables, context, info) => {
+          return payload.reviewAdded.bookId === parseInt(variables.bookId);
+        }
+      )
     }
   }
 };

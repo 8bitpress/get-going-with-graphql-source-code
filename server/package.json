@@ -25,11 +25,14 @@
     "graphql": "^15.5.0",
     "graphql-middleware": "^6.0.4",
     "graphql-shield": "^7.5.0",
+    "graphql-subscriptions": "^1.2.1",
+    "graphql-ws": "^4.3.2",
     "json-server": "^0.16.3",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7",
     "parse-link-header": "^1.0.1",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "ws": "^7.4.4"
   }
 }

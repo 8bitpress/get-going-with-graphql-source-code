@@ -1,11 +1,17 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
+import { useEffect } from "react";
 
 import {
   AddBooksToLibrary,
   RemoveBooksFromLibrary
 } from "../../graphql/mutations";
 import { GetBook } from "../../graphql/queries";
+import { ReviewAdded } from "../../graphql/subscriptions";
+import {
+  updateAddNewReviewToList,
+  updateViewerHasInLibrary
+} from "../../utils/updateQueries";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
@@ -19,11 +25,14 @@ function Book() {
   const history = useHistory();
   const REVIEW_LIMIT = 20;
 
-  const { data, error, fetchMore, loading } = useQuery(GetBook, {
-    variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first"
-  });
+  const { data, error, fetchMore, loading, subscribeToMore } = useQuery(
+    GetBook,
+    {
+      variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 },
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first"
+    }
+  );
   const [addBooksToLibrary] = useMutation(AddBooksToLibrary, {
     update: cache => {
       updateViewerHasInLibrary(cache, id);
@@ -33,6 +42,16 @@ function Book() {
     update: cache => {
       updateViewerHasInLibrary(cache, id);
     }
+  });
+
+  useEffect(() => {
+    const unsubscribe = subscribeToMore({
+      document: ReviewAdded,
+      variables: { bookId: id },
+      updateQuery: (previousResult, { subscriptionData }) =>
+        updateAddNewReviewToList(previousResult, subscriptionData)
+    });
+    return () => unsubscribe();
   });
 
   let content;
@@ -148,23 +167,6 @@ function Book() {
   }
 
   return <MainLayout>{content}</MainLayout>;
-}
-
-function updateViewerHasInLibrary(cache, id) {
-  const { book } = cache.readQuery({
-    query: GetBook,
-    variables: { id }
-  });
-
-  cache.writeQuery({
-    query: GetBook,
-    data: {
-      book: {
-        ...book,
-        viewerHasInLibrary: !book.viewerHasInLibrary
-      }
-    }
-  });
 }
 
 export default Book;

@@ -5,8 +5,8 @@ const isAuthenticated = rule()((parent, args, { user }, info) => {
 });
 
 const isUpdatingOwnLibrary = rule()(
-  (root, { input: { userId } }, { dataSources, user }, info) => {
-    return user.sub === userId;
+  (root, { input: { userId } }, { user }, info) => {
+    return user?.sub === userId;
   }
 );
 

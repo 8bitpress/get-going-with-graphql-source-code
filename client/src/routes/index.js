@@ -1,3 +1,4 @@
+import { createBrowserHistory } from "history";
 import { Switch } from "react-router";
 
 import Book from "../pages/Book";
@@ -9,6 +10,8 @@ import PrivateRoute from "../components/PrivateRoute";
 import PublicRoute from "../components/PublicRoute";
 import ReviewBook from "../pages/ReviewBook";
 import Search from "../pages/Search";
+
+export const history = createBrowserHistory();
 
 function Routes() {
   return (

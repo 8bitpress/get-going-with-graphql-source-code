@@ -1,6 +1,6 @@
 import { onError } from "@apollo/client/link/error";
 
-import { history } from "../../routes";
+import { history } from "../../router";
 
 const authErrorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {

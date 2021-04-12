@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect } from "react";
 
 import {
   AddBooksToLibrary,
@@ -23,12 +23,12 @@ function Book() {
   const { id } = useParams();
   const { viewer } = useAuth();
   const history = useHistory();
-  const REVIEW_LIMIT = 20;
+  const reviewsLimit = 20;
 
   const { data, error, fetchMore, loading, subscribeToMore } = useQuery(
     GetBook,
     {
-      variables: { id, reviewsLimit: REVIEW_LIMIT, reviewsPage: 1 },
+      variables: { id, reviewsLimit, reviewsPage: 1 },
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-first"
     }
@@ -146,7 +146,7 @@ function Book() {
                   onClick={() => {
                     fetchMore({
                       variables: {
-                        reviewsLimit: REVIEW_LIMIT,
+                        reviewsLimit,
                         reviewsPage: reviews.pageInfo.page + 1
                       }
                     });

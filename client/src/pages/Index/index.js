@@ -9,9 +9,9 @@ import PageNotice from "../../components/PageNotice";
 import SearchBooksForm from "../../components/SearchBooksForm";
 
 function Index() {
-  const LIMIT = 12;
+  const limit = 12;
   const { data, error, fetchMore, loading } = useQuery(GetBooks, {
-    variables: { limit: LIMIT, page: 1 }
+    variables: { limit, page: 1 }
   });
 
   let content;
@@ -35,7 +35,7 @@ function Index() {
             <Button
               onClick={() => {
                 fetchMore({
-                  variables: { limit: LIMIT, page: page + 1 }
+                  variables: { limit, page: page + 1 }
                 });
               }}
               text="Load More"

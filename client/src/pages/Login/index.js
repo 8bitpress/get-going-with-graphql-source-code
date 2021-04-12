@@ -2,15 +2,14 @@ import { Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 
-import { Login as LoginMutation } from "../../graphql/mutations";
-import { SignUp } from "../../graphql/mutations";
+import { Login as LoginMutation, SignUp } from "../../graphql/mutations";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 
 function Login() {
-  const [isMember, setIsMember] = useState(true);
   const [email, setEmail] = useState("");
+  const [isMember, setIsMember] = useState(true);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");

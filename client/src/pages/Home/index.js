@@ -8,9 +8,9 @@ import PageNotice from "../../components/PageNotice";
 import MainLayout from "../../components/MainLayout";
 
 function Home() {
-  const LIMIT = 12;
+  const limit = 12;
   const { data, error, fetchMore, loading } = useQuery(GetViewerLibrary, {
-    variables: { limit: LIMIT, page: 1 }
+    variables: { limit, page: 1 }
   });
 
   let content;
@@ -43,7 +43,7 @@ function Home() {
               text="Load More"
               onClick={() => {
                 fetchMore({
-                  variables: { limit: LIMIT, page: page + 1 }
+                  variables: { limit, page: page + 1 }
                 });
               }}
               type="button"

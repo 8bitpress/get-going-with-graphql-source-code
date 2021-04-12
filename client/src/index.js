@@ -3,8 +3,8 @@ import { Router } from "react-router-dom";
 import ReactDOM from "react-dom";
 
 import { AuthProvider } from "./context/AuthContext";
+import { history, Routes } from "./router";
 import client from "./graphql/apollo";
-import Routes, { history } from "./routes";
 
 import "./index.css";
 

@@ -13,7 +13,7 @@ import Search from "../pages/Search";
 
 export const history = createBrowserHistory();
 
-function Routes() {
+export function Routes() {
   return (
     <Switch>
       <PublicRoute exact path="/" component={Index} />
@@ -35,5 +35,3 @@ function Routes() {
     </Switch>
   );
 }
-
-export default Routes;

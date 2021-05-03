@@ -16,8 +16,14 @@ const typeDefs = gql`
 
   # SCALARS
 
+  """
+  An ISO 8601-encoded UTC date string.
+  """
   scalar DateTime
 
+  """
+  An integer-based rating from 1 (low) to 5 (high).
+  """
   scalar Rating
 
   # ENUMS
@@ -129,7 +135,7 @@ const typeDefs = gql`
   A currently authenticated user and their valid JWT.
   """
   type AuthPayload {
-    "The logged in user."
+    "The logged-in user."
     viewer: User
     "A JWT issued at the time of the user's most recent authentication."
     token: String
@@ -362,7 +368,7 @@ const typeDefs = gql`
     "Retrieves a single book by ID."
     review(id: ID!): Review
     """
-    Performs a search of books titles and author names.
+    Performs a search of book titles and author names.
 
     Default sort order is RESULTS_ASC.
     """

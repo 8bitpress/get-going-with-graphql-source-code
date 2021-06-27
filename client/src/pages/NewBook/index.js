@@ -54,7 +54,7 @@ function NewBook() {
     });
   };
 
-  let content;
+  let content = null;
 
   if (viewer) {
     content = (

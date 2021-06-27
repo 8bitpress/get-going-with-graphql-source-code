@@ -17,7 +17,7 @@ function Search() {
     variables: { query: q }
   });
 
-  let content;
+  let content = null;
 
   if (loading) {
     content = <Loader centered />;

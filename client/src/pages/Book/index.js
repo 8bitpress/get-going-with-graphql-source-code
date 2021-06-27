@@ -54,7 +54,7 @@ function Book() {
     return () => unsubscribe();
   });
 
-  let content;
+  let content = null;
 
   if (loading && !data) {
     content = <Loader centered />;

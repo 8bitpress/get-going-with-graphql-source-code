@@ -13,7 +13,7 @@ function Home() {
     variables: { limit, page: 1 }
   });
 
-  let content;
+  let content = null;
 
   if (loading && !data) {
     content = <Loader centered />;

@@ -73,7 +73,7 @@ function ReviewBook() {
     }
   };
 
-  let content;
+  let content = null;
 
   if (loading) {
     content = <Loader centered />;

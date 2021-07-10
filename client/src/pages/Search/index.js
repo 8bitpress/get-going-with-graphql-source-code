@@ -26,8 +26,7 @@ function Search() {
       if (curr.__typename === "Author") {
         return acc.concat(curr.books);
       }
-      acc.push(curr);
-      return acc;
+      return acc.concat(curr);
     }, []);
 
     content = (

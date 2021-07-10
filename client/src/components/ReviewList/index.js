@@ -30,7 +30,7 @@ function ReviewsList({ bookId, reviews, viewerId }) {
         <div>
           <p>
             <span className="font-bold">
-              {reviewer.name || reviewer.username}
+              {reviewer.name}
             </span>{" "}
             {rating && `rated this book ${rating}/5`}
           </p>

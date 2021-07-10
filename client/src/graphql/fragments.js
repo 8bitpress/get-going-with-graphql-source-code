@@ -23,7 +23,6 @@ export const fullReview = gql`
     reviewer {
       id
       name
-      username
     }
     text
   }

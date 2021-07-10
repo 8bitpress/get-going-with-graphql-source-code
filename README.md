@@ -50,7 +50,7 @@ GraphQL APIs are capable of more than just sending stateless HTTP requests to ru
 
 The book takes a hands-on approach to learning essential GraphQL concepts by building a community-based book review application called Bibliotech.
 
-It covers designing the GraphQL API from scratch based on product requirements, building the API out using [Apollo Server](https://www.apollographql.com/docs/apollo-server/), and testing out its various operations using [Apollo Explorer](https://www.apollographql.com/docs/studio/explorer/).
+It covers designing the GraphQL API from scratch based on product requirements, building the API out using [Apollo Server](https://www.apollographql.com/docs/apollo-server/), and testing out its various operations using [Apollo Studio Explorer](https://www.apollographql.com/docs/studio/explorer/).
 
 Once the API is up and running, the book explains how to use [Apollo Client](https://www.apollographql.com/docs/react/) and [Tailwind CSS](https://tailwindcss.com/) to rapidly build out an MVP React application that consumes Bibliotech's new GraphQL API.
 

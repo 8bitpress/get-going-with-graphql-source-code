@@ -6,4 +6,4 @@ This repo contains the completed files for the Node.js and React applications bu
 
 ---
 
-Copyright © 2021 8-Bit Press Inc.
+Copyright © 2022 8-Bit Press Inc.

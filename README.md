@@ -4,6 +4,8 @@ This repo contains the completed files for the Node.js and React applications bu
 
 **[Get the book package here](https://github.com/8bitpress/get-going-with-graphql)**
 
+Happy coding!
+
 ---
 
 Copyright © 2022 8-Bit Press Inc.
